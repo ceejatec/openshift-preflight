@@ -15,10 +15,10 @@ var _ = Describe("Pyxis Submit", func() {
 
 	var pyxisClient *pyxisClient
 	mux := http.NewServeMux()
-	mux.Handle("/api/v1/projects/certification/id/", &pyxisProjectHandler{})
+	mux.Handle("/api/v1/projects/certification/pid/", &pyxisProjectHandler{})
 	mux.Handle("/api/v1/images", &pyxisImageHandler{})
 	mux.Handle("/api/v1/images/id/blah/", &pyxisRPMManifestHandler{})
-	mux.Handle("/api/v1/projects/certification/id/my-awesome-project-id/test-results", &pyxisTestResultsHandler{})
+	mux.Handle("/api/v1/projects/certification/pid/my-awesome-project-id/test-results", &pyxisTestResultsHandler{})
 
 	Context("when a project is submitted", func() {
 		BeforeEach(func() {

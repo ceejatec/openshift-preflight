@@ -92,7 +92,7 @@ func (p *pyxisClient) createImage(ctx context.Context, certImage *CertImage) (*C
 
 func (p *pyxisClient) getImage(ctx context.Context, dockerImageDigest string) (*CertImage, error) {
 	req, err := p.newRequestWithApiToken(ctx, http.MethodGet,
-		p.getPyxisUrl(fmt.Sprintf("projects/certification/id/%s/images?filter=docker_image_digest==%s", p.ProjectId, dockerImageDigest)), nil)
+		p.getPyxisUrl(fmt.Sprintf("projects/certification/pid/%s/images?filter=docker_image_digest==%s", p.ProjectId, dockerImageDigest)), nil)
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -216,7 +216,7 @@ func (p *pyxisClient) getRPMManifest(ctx context.Context, imageID string) (*RPMM
 }
 
 func (p *pyxisClient) GetProject(ctx context.Context) (*CertProject, error) {
-	req, err := p.newRequestWithApiToken(ctx, http.MethodGet, p.getPyxisUrl(fmt.Sprintf("projects/certification/id/%s", p.ProjectId)), nil)
+	req, err := p.newRequestWithApiToken(ctx, http.MethodGet, p.getPyxisUrl(fmt.Sprintf("projects/certification/pid/%s", p.ProjectId)), nil)
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -238,6 +238,7 @@ func (p *pyxisClient) GetProject(ctx context.Context) (*CertProject, error) {
 	}
 
 	if !checkStatus(resp.StatusCode) {
+		log.Errorf("grrrr: %d", resp.StatusCode)
 		log.Errorf("%s: %s", "received non 200 status code in GetProject", string(body))
 		return nil, errors.ErrNon200StatusCode
 	}
@@ -257,7 +258,7 @@ func (p *pyxisClient) updateProject(ctx context.Context, certProject *CertProjec
 		log.Error(err)
 		return nil, err
 	}
-	req, err := p.newRequestWithApiToken(ctx, http.MethodPatch, p.getPyxisUrl(fmt.Sprintf("projects/certification/id/%s", p.ProjectId)), bytes.NewReader(b))
+	req, err := p.newRequestWithApiToken(ctx, http.MethodPatch, p.getPyxisUrl(fmt.Sprintf("projects/certification/pid/%s", p.ProjectId)), bytes.NewReader(b))
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -299,7 +300,7 @@ func (p *pyxisClient) createTestResults(ctx context.Context, testResults *TestRe
 		log.Error(err)
 		return nil, err
 	}
-	req, err := p.newRequestWithApiToken(ctx, http.MethodPost, p.getPyxisUrl(fmt.Sprintf("projects/certification/id/%s/test-results", p.ProjectId)), bytes.NewReader(b))
+	req, err := p.newRequestWithApiToken(ctx, http.MethodPost, p.getPyxisUrl(fmt.Sprintf("projects/certification/pid/%s/test-results", p.ProjectId)), bytes.NewReader(b))
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -339,7 +340,7 @@ func (p *pyxisClient) createArtifact(ctx context.Context, artifact *Artifact) (*
 		log.Error(err)
 		return nil, err
 	}
-	req, err := p.newRequestWithApiToken(ctx, http.MethodPost, p.getPyxisUrl(fmt.Sprintf("projects/certification/id/%s/artifacts", p.ProjectId)), bytes.NewReader(b))
+	req, err := p.newRequestWithApiToken(ctx, http.MethodPost, p.getPyxisUrl(fmt.Sprintf("projects/certification/pid/%s/artifacts", p.ProjectId)), bytes.NewReader(b))
 	if err != nil {
 		log.Error(err)
 		return nil, err
